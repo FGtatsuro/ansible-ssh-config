@@ -1,2 +1,6 @@
 ---
 # defaults file for ssh_config
+sshconfig_home: "/root"
+sshconfig_owner: "root"
+sshconfig_group: "root"
+sshconfig_knownhosts: []
