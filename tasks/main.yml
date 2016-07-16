@@ -1,4 +1,35 @@
 ---
 # tasks file for ssh_config
-- name: Run specified tasks on current platform 
+- name: Run specified tasks on current platform
   include: "{{ ansible_os_family }}.yml"
+- block:
+  - name: Create .ssh directory
+    file:
+      path: "{{ sshconfig_home }}/.ssh"
+      owner: "{{ sshconfig_owner }}"
+      group: "{{ sshconfig_group }}"
+      state: "directory"
+      recurse: yes
+  - name: Check whether known_host file exists
+    stat:
+      path: "{{ sshconfig_home }}/.ssh/known_hosts"
+    register: stat_known_hosts
+    changed_when: no
+  - name: Create known_hosts file
+    file:
+      path: "{{ sshconfig_home }}/.ssh/known_hosts"
+      owner: "{{ sshconfig_owner }}"
+      group: "{{ sshconfig_group }}"
+      state: "touch"
+    when: not stat_known_hosts.stat.exists
+  - name: Check whether hostname exists in known_hosts file
+    command: "ssh-keygen -F {{ item }} -f {{ sshconfig_home }}/.ssh/known_hosts"
+    register: results_hostname_exists
+    with_items: "{{ sshconfig_knownhosts }}"
+    ignore_errors: yes
+    changed_when: no
+  - name: Add hostname as known hosts to known_hosts file
+    shell: "ssh-keyscan {{ item.item }} >> {{ sshconfig_home }}/.ssh/known_hosts"
+    with_items: "{{ results_hostname_exists.results }}"
+    when: "item.rc != 0"
+  become: yes
