@@ -1,4 +1,17 @@
 ---
 # tasks file for ssh_config
-- name: Run specified tasks on current platform 
+- name: Run specified tasks on current platform
   include: "{{ ansible_os_family }}.yml"
+- block:
+  - name: Create .ssh directory
+    file:
+      path: "{{ sshconfig_home }}/.ssh"
+      owner: "{{ sshconfig_owner }}"
+      group: "{{ sshconfig_group }}"
+      recurse: yes
+  - name: Add known hosts to clone repositories.
+    known_hosts:
+      path: '{{ sshconfig_home }}/.ssh/known_hosts'
+      name: '{{ item }}'
+    with_items: "{{ sshconfig_knownhosts }}"
+  become: yes
