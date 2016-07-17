@@ -12,7 +12,7 @@ matrix:
         # Workaround for OSX.
         - sudo pip install -U setuptools
         - sudo pip install ansible
-        - ansible-galaxy install FGtatsuro.python-requirements
+        - ansible-galaxy install -r role_requirements.yml
         - bundle install
       env:
         - TARGET=localhost
@@ -60,7 +60,7 @@ sudo: required
 install:
   - pip install ansible
   # Resolve dependencies(When target role isn't installed via Ansible Galaxy, auto resolution of dependencies doesn't occur.)
-  - ansible-galaxy install FGtatsuro.python-requirements
+  - ansible-galaxy install -r role_requirements.yml
   - bundle install
 
 script:
