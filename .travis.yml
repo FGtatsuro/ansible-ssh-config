@@ -14,6 +14,7 @@ matrix:
         - sudo pip install ansible
         - ansible-galaxy install -r role_requirements.yml
         - bundle install
+        - cat /Users/travis/.ssh/known_hosts
       env:
         - TARGET=localhost
         # Workaround for OSX.
