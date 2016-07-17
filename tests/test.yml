@@ -2,4 +2,7 @@
 - hosts: all
   remote_user: root
   roles:
-    - { role: ssh_config }
+    - role: ssh_config
+      sshconfig_knownhosts:
+        - 'github.com'
+        - 'bitbucket.org'
