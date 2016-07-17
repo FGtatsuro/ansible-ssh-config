@@ -1,17 +1,19 @@
 require "spec_helper_#{ENV['SPEC_TARGET_BACKEND']}"
 
-describe package('python-dev'), :if => ['debian', 'alpine'].include?(os[:family]) do
-  it { should be_installed }
+describe file("#{ENV['SSHCONFIG_HOME']}/.ssh") do
+  it { should be_directory }
+  it { should be_owned_by ENV['SSHCONFIG_OWNER'] }
+  it { should be_grouped_into ENV['SSHCONFIG_GROUP'] }
 end
 
-describe package('build-essential'), :if => os[:family] == 'debian' do
-  it { should be_installed }
+describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/known_hosts") do
+  it { should be_file }
+  it { should be_owned_by ENV['SSHCONFIG_OWNER'] }
+  it { should be_grouped_into ENV['SSHCONFIG_GROUP'] }
 end
 
-describe package('build-base'), :if => os[:family] == 'alpine' do
-  it { should be_installed }
-end
-
-describe command('which python') do
-  its(:exit_status) { should eq 0 }
+# Avoid OSX on Travis.
+describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/known_hosts"), :if => os[:family] == 'debian' do
+  its(:content) { should include('github.com') }
+  its(:content) { should include('bitbucket.org') }
 end
