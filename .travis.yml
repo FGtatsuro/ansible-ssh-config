@@ -18,6 +18,7 @@ matrix:
         - TARGET=localhost
         # Workaround for OSX.
         - PYTHONPATH="/Library/Python/2.7/site-packages:$PYTHONPATH"
+        - EXTRA_VARS="sshconfig_home='/Users/travis' sshconfig_owner='travis' sshconfig_group='staff'"
     - os: linux
       dist: trusty
       language: python
@@ -29,9 +30,9 @@ matrix:
           packages:
           - python-pip
       before_script:
-        - docker run -it -d --name container ${IMAGE_NAME} /bin/sh
+        - docker run -it -d --name ${TARGET} ${IMAGE_NAME} /bin/sh
       after_script:
-        - docker rm -f container
+        - docker rm -f ${TARGET}
       env:
         - TARGET=container
         - IMAGE_NAME=fgtatsuro/infra-bridgehead:debian-jessie
@@ -46,12 +47,32 @@ matrix:
           packages:
           - python-pip
       before_script:
-        - docker run -it -d --name container ${IMAGE_NAME} /bin/sh
+        - docker run -it -d --name ${TARGET} ${IMAGE_NAME} /bin/sh
       after_script:
-        - docker rm -f container
+        - docker rm -f ${TARGET}
       env:
         - TARGET=container
         - IMAGE_NAME=fgtatsuro/infra-bridgehead:alpine-3.3
+    - os: linux
+      dist: trusty
+      language: python
+      python: 2.7
+      services:
+        - docker
+      addons:
+        apt:
+          packages:
+          - python-pip
+      before_script:
+        - docker run -it -d --name ${TARGET} ${IMAGE_NAME} /bin/sh
+        - docker exec -it ${TARGET} groupadd jenkins
+        - docker exec -it ${TARGET} useradd -s /bin/bash -d /home/jenkins -m -g jenkins jenkins
+      after_script:
+        - docker rm -f container_with_specified_user
+      env:
+        - TARGET=container
+        - IMAGE_NAME=fgtatsuro/infra-bridgehead:debian-jessie
+        - EXTRA_VARS="sshconfig_home='/home/jenkins' sshconfig_owner='jenkins' sshconfig_group='jenkins'"
 
 # This role needs sudo, thus we can't use the new container infrastructure
 # sudo: false
@@ -66,7 +87,7 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-  - ansible-playbook tests/test.yml -i tests/inventory -l ${TARGET} -vvvv
+  - ansible-playbook tests/test.yml -i tests/inventory -l ${TARGET} --extra-vars="${EXTRA_VARS}" -vvvv
   - bundle exec rake spec SPEC_TARGET=${TARGET}
 
 notifications:
