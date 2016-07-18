@@ -20,12 +20,16 @@ Role Variables
 
 The variables we can use in this role.
 
-|name|description|default|
-|---|---|---|
-|sshconfig_home|`.ssh` directory is put.|/root|
-|sshconfig_owner|User of `.ssh` directory. `ssh_home` should also be home directory of this user.|root|
-|sshconfig_group|Group of `.ssh` directory.|root(This value is only valid on Linux. For OSX, please use `wheel` or `admin` as same means.)|
-|sshconfig_knownhosts|Hosts included in `.ssh/known_hosts`.|Empty list. No host is added in known_hosts in default.|
+|name|description|type|default|
+|---|---|---|---|
+|sshconfig_home|`.ssh` directory is put under the directory of this value.|str|/root|
+|sshconfig_owner|User of `.ssh` directory. `ssh_home` should also be home directory of this user.|str|root|
+|sshconfig_group|Group of `.ssh` directory.|str|root(This value is only valid on Linux. For OSX, please use `wheel` or `admin` as same means.)|
+|sshconfig_knownhosts|Hosts included in `.ssh/known_hosts`.|list|Empty list. No host is added in known_hosts in default.|
+|sshconfig_publickey_paths|Path of public keys on local. They are copied under `.ssh` directory on remote.|list|Empty list. No public key is added under `.ssh` directory.|
+|sshconfig_privatekey_paths|Path of private keys on local. They are copied under `.ssh` directory on remote.|list|Empty list. No public key is added under `.ssh` directory.|
+
+- If dest paths of public keys/private keys already exist, playbook execution will be failed.
 
 Role Dependencies
 -----------------

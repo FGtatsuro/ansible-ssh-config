@@ -12,6 +12,24 @@ describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/known_hosts") do
   it { should be_grouped_into ENV['SSHCONFIG_GROUP'] }
 end
 
+['id_rsa1.pub', 'id_rsa2.pub'].each do |pub|
+  describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/#{pub}") do
+    it { should be_file }
+    it { should be_owned_by ENV['SSHCONFIG_OWNER'] }
+    it { should be_grouped_into ENV['SSHCONFIG_GROUP'] }
+    it { should be_mode 644 }
+  end
+end
+
+['id_rsa1', 'id_rsa2'].each do |pri|
+  describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/#{pri}") do
+    it { should be_file }
+    it { should be_owned_by ENV['SSHCONFIG_OWNER'] }
+    it { should be_grouped_into ENV['SSHCONFIG_GROUP'] }
+    it { should be_mode 600 }
+  end
+end
+
 # Avoid OSX on Travis.
 describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/known_hosts"), :if => os[:family] == 'debian' do
   its(:content) { should include('github.com') }
