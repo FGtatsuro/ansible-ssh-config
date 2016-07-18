@@ -12,3 +12,6 @@
       sshconfig_privatekey_paths:
         - './ssh/id_rsa1'
         - './ssh/id_rsa2'
+      sshconfig_authorizedkey_paths:
+        - './ssh/id_rsa1.pub'
+        - './ssh/id_rsa2.pub'
