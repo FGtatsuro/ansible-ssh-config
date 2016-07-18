@@ -6,3 +6,9 @@
       sshconfig_knownhosts:
         - 'github.com'
         - 'bitbucket.org'
+      sshconfig_publickey_paths:
+        - './ssh/id_rsa1.pub'
+        - './ssh/id_rsa2.pub'
+      sshconfig_privatekey_paths:
+        - './ssh/id_rsa1'
+        - './ssh/id_rsa2'
