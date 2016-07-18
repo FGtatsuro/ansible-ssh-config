@@ -55,4 +55,13 @@
       path: "{{ sshconfig_home }}/.ssh/authorized_keys"
       manage_dir: no
     with_items: "{{ sshconfig_authorizedkey_paths }}"
+  - name: Copy SSH client config under .ssh directory
+    blockinfile:
+      dest: "{{ sshconfig_home }}/.ssh/config"
+      content: "{{ lookup('file', sshconfig_clientconfig_path) }}"
+      owner: "{{ sshconfig_owner }}"
+      group: "{{ sshconfig_group }}"
+      mode: 0600
+      create: yes
+    when: "sshconfig_clientconfig_path is defined"
   become: yes
