@@ -32,4 +32,20 @@
     shell: "ssh-keyscan {{ item.item }} >> {{ sshconfig_home }}/.ssh/known_hosts"
     with_items: "{{ results_hostname_exists.results }}"
     when: "item.rc != 0"
+  - name: Copy public keys under .ssh directory
+    copy:
+      dest: "{{ sshconfig_home }}/.ssh/{{ item | basename }}"
+      content: "{{ lookup('file', item) }}"
+      owner: "{{ sshconfig_owner }}"
+      group: "{{ sshconfig_group }}"
+      mode: 0644
+    with_items: "{{ sshconfig_publickey_paths }}"
+  - name: Copy private keys under .ssh directory
+    copy:
+      dest: "{{ sshconfig_home }}/.ssh/{{ item | basename }}"
+      content: "{{ lookup('file', item) }}"
+      owner: "{{ sshconfig_owner }}"
+      group: "{{ sshconfig_group }}"
+      mode: 0600
+    with_items: "{{ sshconfig_privatekey_paths }}"
   become: yes
