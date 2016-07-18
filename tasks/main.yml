@@ -48,4 +48,11 @@
       group: "{{ sshconfig_group }}"
       mode: 0600
     with_items: "{{ sshconfig_privatekey_paths }}"
+  - name: Add authorized public keys
+    authorized_key:
+      user: "{{ sshconfig_owner }}"
+      key: "{{ lookup('file', item) }}"
+      path: "{{ sshconfig_home }}/.ssh/authorized_keys"
+      manage_dir: no
+    with_items: "{{ sshconfig_authorizedkey_paths }}"
   become: yes
