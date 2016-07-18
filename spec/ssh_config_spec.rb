@@ -41,6 +41,17 @@ describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/authorized_keys") do
   its(:content) { should include('AAAAB3NzaC1yc2EAAAADAQABAAABAQC1iecz1Lorz1FQS8EpgRccf9SXJEPsLyDBFUH32aqIyylvV1PC5iWNcHTWs03fFLV63QeI5PX1Bl7CAG0Gea2xmsaeJWU6esqVbbq5wgkMlErtX9CeQyjQGJ98rKc/fSHZua2iCRwhfijyJGMKcH36K5bcE/yGJwiiLc+1igUMxNb7qP1eV+874+3oIP51y1ZWw8Q4nGh3jkQ4cTG08TX32ucrLu3uqWOnHokXuTxoTh9UdvLopKnGVvUVroqeDZXaLtFSaWG9vygaFAYO7I7sQii8OqEf77ra0CupkUvK2ft0FGWZxoGMEMdJX56cGC0YyZhFhyE6MgviX6e7A783') }
 end
 
+describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/config") do
+  it { should be_file }
+  it { should be_owned_by ENV['SSHCONFIG_OWNER'] }
+  it { should be_grouped_into ENV['SSHCONFIG_GROUP'] }
+  it { should be_mode 600 }
+  its(:content) { should include('Host *') }
+  its(:content) { should include('StrictHostKeyChecking=no') }
+  its(:content) { should include('UserKnownHostsFile=/dev/null') }
+  its(:content) { should include('UseRoaming no') }
+end
+
 # Avoid OSX on Travis.
 describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/known_hosts"), :if => os[:family] == 'debian' do
   its(:content) { should include('github.com') }
