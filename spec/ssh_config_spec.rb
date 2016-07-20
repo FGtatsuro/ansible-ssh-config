@@ -30,8 +30,9 @@ end
   end
 end
 
-id_rsa1_pub = `cat tests/ssh/id_rsa1_pub`
-id_rsa2_pub = `cat tests/ssh/id_rsa1_pub`
+id_rsa1_pub = `cat tests/ssh/id_rsa1.pub`
+id_rsa2_pub = `cat tests/ssh/id_rsa2.pub`
+puts id_rsa1_pub
 describe file("#{ENV['SSHCONFIG_HOME']}/.ssh/authorized_keys") do
   it { should be_file }
   it { should be_owned_by ENV['SSHCONFIG_OWNER'] }
