@@ -86,6 +86,9 @@ install:
   - bundle install
 
 script:
+  - echo "Host *\n  StrictHostKeyChecking=no" > tests/ssh/config
+  - ssh-keygen -t rsa -N '' -f tests/ssh/id_rsa1
+  - ssh-keygen -t rsa -N '' -f tests/ssh/id_rsa2
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
   - ansible-playbook tests/test.yml -i tests/inventory -l ${TARGET} --extra-vars="${EXTRA_VARS}" -vvvv
