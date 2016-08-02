@@ -29,7 +29,7 @@ The variables we can use in this role.
 |sshconfig_publickey_paths|Paths of public keys on local. They are copied under `.ssh` directory on remote.<br>Each basename are used as each key name. For example, when `./resources/ssh/id_rsa2.pub` exists in `sshconfig_publickey_paths`, `id_rsa2.pub` is copied under `.ssh` directory.|list|Empty list. No public key is added under `.ssh` directory.|
 |sshconfig_privatekey_paths|Paths of private keys on local. They are copied under `.ssh` directory on remote.<br>Each basename are used as each key name. For example, when `./resources/ssh/id_rsa2` exists in `sshconfig_privatekey_paths`, `id_rsa2` is copied under `.ssh` directory.|list|Empty list. No public key is added under `.ssh` directory.|
 |sshconfig_authorizedkey_paths|Paths of authorized keys on local. They are added in `.ssh/authorized_keys` file on remote.|list|Empty list. No authorized key is added in `.ssh/authorized_keys` file.|
-|sshconfig_clientconfig_path|Path of SSH client config on local. It is copied as `.ssh/config` file on remote.|str|It isn't defined in default.|
+|sshconfig_clientconfig_path|Path of SSH client config on local. Its content is copied to `.ssh/config` file on remote.|str|It isn't defined in default.|
 
 - If dest paths of public keys/private keys already exist, playbook execution will be failed.
 - Basenames of `sshconfig_publickey_paths`/`sshconfig_privatekey_paths` are used as each key name. For example, when `./resources/ssh/id_rsa2.pub` exists in `sshconfig_publickey_paths`, `id_rsa2.pub` is copied under `.ssh` directory.
