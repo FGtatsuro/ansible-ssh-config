@@ -31,8 +31,7 @@ The variables we can use in this role.
 |sshconfig_authorizedkey_paths|Paths of authorized keys on local. They are added in `.ssh/authorized_keys` file on remote.|list|Empty list. No authorized key is added in `.ssh/authorized_keys` file.|
 |sshconfig_clientconfig_path|Path of SSH client config on local. Its content is copied to `.ssh/config` file on remote.|str|It isn't defined in default.|
 
-- If dest paths of public keys/private keys already exist, playbook execution will be failed.
-- Basenames of `sshconfig_publickey_paths`/`sshconfig_privatekey_paths` are used as each key name. For example, when `./resources/ssh/id_rsa2.pub` exists in `sshconfig_publickey_paths`, `id_rsa2.pub` is copied under `.ssh` directory.
+- If other public keys/private keys with same basenames exist on dest paths, playbook execution will be failed.
 
 Role Dependencies
 -----------------
