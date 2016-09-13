@@ -10,11 +10,12 @@ matrix:
       language: generic
       install:
         # Workaround for OSX.
+        - brew install libffi libyaml openssl
+        - brew link openssl --force
         - sudo pip install -U setuptools
         - sudo pip install ansible
         - ansible-galaxy install -r role_requirements.yml
         - bundle install
-        - cat /Users/travis/.ssh/known_hosts
       env:
         - TARGET=localhost
         # Workaround for OSX.
