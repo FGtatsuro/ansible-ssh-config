@@ -3,7 +3,3 @@
 sshconfig_home: "/root"
 sshconfig_owner: "root"
 sshconfig_group: "root"
-sshconfig_knownhosts: []
-sshconfig_publickey_paths: []
-sshconfig_privatekey_paths: []
-sshconfig_authorizedkey_paths: []
