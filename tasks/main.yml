@@ -28,6 +28,7 @@
     with_items: "{{ sshconfig_knownhosts }}"
     ignore_errors: yes
     changed_when: no
+    when: sshconfig_knownhosts is defined
   - name: Add hostname as known hosts to known_hosts file
     shell: "ssh-keyscan {{ item.item }} >> {{ sshconfig_home }}/.ssh/known_hosts"
     with_items: "{{ results_hostname_exists.results }}"
@@ -40,6 +41,7 @@
       group: "{{ sshconfig_group }}"
       mode: 0644
     with_items: "{{ sshconfig_publickey_paths }}"
+    when: sshconfig_publickey_paths is defined
   - name: Copy private keys under .ssh directory
     copy:
       dest: "{{ sshconfig_home }}/.ssh/{{ item | basename }}"
@@ -48,6 +50,7 @@
       group: "{{ sshconfig_group }}"
       mode: 0600
     with_items: "{{ sshconfig_privatekey_paths }}"
+    when: sshconfig_privatekey_paths is defined
   - name: Add authorized public keys
     authorized_key:
       user: "{{ sshconfig_owner }}"
@@ -55,6 +58,7 @@
       path: "{{ sshconfig_home }}/.ssh/authorized_keys"
       manage_dir: no
     with_items: "{{ sshconfig_authorizedkey_paths }}"
+    when: sshconfig_authorizedkey_paths is defined
   - name: Copy SSH client config under .ssh directory
     blockinfile:
       dest: "{{ sshconfig_home }}/.ssh/config"
@@ -63,5 +67,5 @@
       group: "{{ sshconfig_group }}"
       mode: 0600
       create: yes
-    when: "sshconfig_clientconfig_path is defined"
+    when: sshconfig_clientconfig_path is defined
   become: yes
